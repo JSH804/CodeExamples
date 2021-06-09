@@ -1,0 +1,267 @@
+USE [Ignition_Hub_DB]
+GO
+/****** Object:  Table [dbo].[Accounting]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Accounting](
+	[FixedAccountingID] [int] NOT NULL,
+	[MinMargin] [decimal](18, 2) NOT NULL,
+	[IdealMargin] [decimal](18, 2) NOT NULL,
+	[SalesTax] [decimal](18, 2) NOT NULL,
+	[Commission] [decimal](18, 2) NOT NULL,
+ CONSTRAINT [PK_Accounting] PRIMARY KEY CLUSTERED 
+(
+	[FixedAccountingID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Car]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Car](
+	[CarID] [int] IDENTITY(1,1) NOT NULL,
+	[Year] [varchar](10) NOT NULL,
+	[Color] [varchar](50) NOT NULL,
+	[Mileage] [varchar](50) NOT NULL,
+	[Cost] [decimal](19, 4) NOT NULL,
+	[MarketValue] [decimal](19, 4) NULL,
+	[BodyType] [varchar](50) NOT NULL,
+	[Drive] [varchar](50) NOT NULL,
+	[Notes] [varchar](255) NULL,
+	[Available] [bit] NOT NULL,
+	[VinNumber] [varchar](50) NOT NULL,
+	[CarLotID] [int] NOT NULL,
+	[ModelID] [int] NOT NULL,
+ CONSTRAINT [PK_Car] PRIMARY KEY CLUSTERED 
+(
+	[CarID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CarLot]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CarLot](
+	[CarLotID] [int] IDENTITY(1,1) NOT NULL,
+	[LotName] [varchar](50) NOT NULL,
+	[Address] [varchar](50) NOT NULL,
+	[City] [varchar](50) NOT NULL,
+	[State] [varchar](50) NOT NULL,
+	[ZipCode] [varchar](50) NOT NULL,
+	[MonthlyRent] [decimal](19, 4) NOT NULL,
+	[PhoneNumber] [varchar](50) NULL,
+	[ActiveLot] [bit] NOT NULL,
+	[DateLotOpened] [date] NOT NULL,
+	[DateLotClosed] [date] NULL,
+ CONSTRAINT [PK_CarLot] PRIMARY KEY CLUSTERED 
+(
+	[CarLotID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CarVendor]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CarVendor](
+	[CarVendorID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Address] [varchar](50) NOT NULL,
+	[City] [varchar](50) NOT NULL,
+	[State] [varchar](50) NOT NULL,
+	[ZipCode] [varchar](50) NOT NULL,
+	[PhoneNumber] [varchar](50) NULL,
+	[Email] [varchar](50) NULL,
+	[CompanyName] [varchar](50) NULL,
+ CONSTRAINT [PK_CarVendor] PRIMARY KEY CLUSTERED 
+(
+	[CarVendorID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customer]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer](
+	[CustomerID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Address] [varchar](50) NOT NULL,
+	[City] [varchar](50) NOT NULL,
+	[State] [varchar](50) NOT NULL,
+	[ZipCode] [varchar](50) NOT NULL,
+	[PhoneNumber] [varchar](50) NULL,
+	[Email] [varchar](50) NULL,
+ CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
+(
+	[CustomerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Image]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Image](
+	[ImageID] [int] IDENTITY(1,1) NOT NULL,
+	[CarID] [int] NOT NULL,
+	[Title] [varchar](max) NULL,
+	[ImagePath] [varchar](max) NOT NULL,
+ CONSTRAINT [PK_Image] PRIMARY KEY CLUSTERED 
+(
+	[ImageID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Make]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Make](
+	[MakeID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Make] PRIMARY KEY CLUSTERED 
+(
+	[MakeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Model]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Model](
+	[ModelID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[MakeID] [int] NOT NULL,
+ CONSTRAINT [PK_Model] PRIMARY KEY CLUSTERED 
+(
+	[ModelID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PurchaseOrder]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PurchaseOrder](
+	[PurchaseOrderID] [int] IDENTITY(1,1) NOT NULL,
+	[Cost] [decimal](19, 4) NULL,
+	[Date] [datetime] NOT NULL,
+	[SalesMemberID] [int] NOT NULL,
+	[CarVendorID] [int] NOT NULL,
+	[CarID] [int] NOT NULL,
+ CONSTRAINT [PK_PurchaseOrder] PRIMARY KEY CLUSTERED 
+(
+	[PurchaseOrderID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SalesMember]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SalesMember](
+	[SalesMemberID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Salary] [decimal](19, 4) NOT NULL,
+	[PhoneNumber] [varchar](50) NOT NULL,
+	[Email] [varchar](50) NOT NULL,
+	[ActiveEmployee] [bit] NOT NULL,
+	[StartDate] [date] NOT NULL,
+	[EndDate] [date] NULL,
+ CONSTRAINT [PK_SalesMember] PRIMARY KEY CLUSTERED 
+(
+	[SalesMemberID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SalesOrder]    Script Date: 6/9/2021 6:05:06 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SalesOrder](
+	[SalesOrderID] [int] IDENTITY(1,1) NOT NULL,
+	[FinalSalesAmount] [decimal](19, 4) NOT NULL,
+	[Margin] [decimal](18, 2) NULL,
+	[TaxTotal] [decimal](19, 4) NULL,
+	[SaleDate] [datetime] NOT NULL,
+	[SaleCommission] [decimal](19, 4) NULL,
+	[Revenue] [decimal](19, 4) NULL,
+	[GrossProfit] [decimal](19, 4) NULL,
+	[CarID] [int] NOT NULL,
+	[CustomerID] [int] NOT NULL,
+	[SalesMemberID] [int] NOT NULL,
+ CONSTRAINT [PK_SalesOrder] PRIMARY KEY CLUSTERED 
+(
+	[SalesOrderID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Car]  WITH CHECK ADD  CONSTRAINT [FK_268] FOREIGN KEY([ModelID])
+REFERENCES [dbo].[Model] ([ModelID])
+GO
+ALTER TABLE [dbo].[Car] CHECK CONSTRAINT [FK_268]
+GO
+ALTER TABLE [dbo].[Car]  WITH CHECK ADD  CONSTRAINT [FK_98] FOREIGN KEY([CarLotID])
+REFERENCES [dbo].[CarLot] ([CarLotID])
+GO
+ALTER TABLE [dbo].[Car] CHECK CONSTRAINT [FK_98]
+GO
+ALTER TABLE [dbo].[Image]  WITH CHECK ADD  CONSTRAINT [FK_85] FOREIGN KEY([CarID])
+REFERENCES [dbo].[Car] ([CarID])
+GO
+ALTER TABLE [dbo].[Image] CHECK CONSTRAINT [FK_85]
+GO
+ALTER TABLE [dbo].[Model]  WITH CHECK ADD  CONSTRAINT [FK_265] FOREIGN KEY([MakeID])
+REFERENCES [dbo].[Make] ([MakeID])
+GO
+ALTER TABLE [dbo].[Model] CHECK CONSTRAINT [FK_265]
+GO
+ALTER TABLE [dbo].[PurchaseOrder]  WITH CHECK ADD  CONSTRAINT [FK_209] FOREIGN KEY([SalesMemberID])
+REFERENCES [dbo].[SalesMember] ([SalesMemberID])
+GO
+ALTER TABLE [dbo].[PurchaseOrder] CHECK CONSTRAINT [FK_209]
+GO
+ALTER TABLE [dbo].[PurchaseOrder]  WITH CHECK ADD  CONSTRAINT [FK_215] FOREIGN KEY([CarVendorID])
+REFERENCES [dbo].[CarVendor] ([CarVendorID])
+GO
+ALTER TABLE [dbo].[PurchaseOrder] CHECK CONSTRAINT [FK_215]
+GO
+ALTER TABLE [dbo].[PurchaseOrder]  WITH CHECK ADD  CONSTRAINT [FK_236] FOREIGN KEY([CarID])
+REFERENCES [dbo].[Car] ([CarID])
+GO
+ALTER TABLE [dbo].[PurchaseOrder] CHECK CONSTRAINT [FK_236]
+GO
+ALTER TABLE [dbo].[SalesOrder]  WITH CHECK ADD  CONSTRAINT [FK_128] FOREIGN KEY([CarID])
+REFERENCES [dbo].[Car] ([CarID])
+GO
+ALTER TABLE [dbo].[SalesOrder] CHECK CONSTRAINT [FK_128]
+GO
+ALTER TABLE [dbo].[SalesOrder]  WITH CHECK ADD  CONSTRAINT [FK_218] FOREIGN KEY([CustomerID])
+REFERENCES [dbo].[Customer] ([CustomerID])
+GO
+ALTER TABLE [dbo].[SalesOrder] CHECK CONSTRAINT [FK_218]
+GO
+ALTER TABLE [dbo].[SalesOrder]  WITH CHECK ADD  CONSTRAINT [FK_221] FOREIGN KEY([SalesMemberID])
+REFERENCES [dbo].[SalesMember] ([SalesMemberID])
+GO
+ALTER TABLE [dbo].[SalesOrder] CHECK CONSTRAINT [FK_221]
+GO
