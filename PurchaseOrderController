@@ -1,0 +1,32 @@
+        [Route("PurchaseOrderController/Create/{CarID?}")]
+        public ActionResult Create(int? CarID)
+        {
+            ViewBag.CarID = CarID;
+            //new SelectList(db.Cars, "CarID", "CarID");
+            ViewBag.CarVendorID = new SelectList(db.CarVendors, "CarVendorID", "VendorName");
+            ViewBag.SalesMemberID = new SelectList(db.SalesMembers, "SalesMemberID", "Name");
+            return View();
+        }
+
+        // POST: PurchaseOrder/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("PurchaseOrderController/Create/{CarID?}")]
+        public ActionResult Create([Bind(Include = "PurchaseOrderID,Cost,Date,SalesMemberID,CarVendorID,CarID")] PurchaseOrder purchaseOrder)
+        {
+            if (ModelState.IsValid)
+            {
+                var car = db.Cars.Find(purchaseOrder.CarID);
+                purchaseOrder.Cost = car?.Cost;
+                db.PurchaseOrders.Add(purchaseOrder);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CarID = new SelectList(db.Cars, "CarID", "Year", purchaseOrder.CarID);
+            ViewBag.CarVendorID = new SelectList(db.CarVendors, "CarVendorID", "FirstName", purchaseOrder.CarVendorID);
+            ViewBag.SalesMemberID = new SelectList(db.SalesMembers, "SalesMemberID", "FirstName", purchaseOrder.SalesMemberID);
+            return View(purchaseOrder);
+        }
