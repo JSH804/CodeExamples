@@ -1,0 +1,24 @@
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("SalesOrderController/Create/{CarID?}")]
+        public ActionResult Create([Bind(Include = "SalesOrderID,FinalSalesAmount,Margin,TaxTotal,SaleDate,SaleCommission,Revenue,GrossProfit,CarID,CustomerID,SalesMemberID")] SalesOrder salesOrder)
+        {
+            if (ModelState.IsValid)
+            {
+                var car = db.Cars.Find(salesOrder.CarID);
+                var accounting = db.Accountings.FirstOrDefault();
+                salesOrder.Margin = (salesOrder.FinalSalesAmount - car?.Cost) / car?.Cost;
+                salesOrder.SaleCommission = (salesOrder.FinalSalesAmount - car.Cost) * accounting?.Commission;
+                salesOrder.Revenue = salesOrder.FinalSalesAmount - car.Cost;
+                salesOrder.TaxTotal = (salesOrder.FinalSalesAmount - car?.Cost) * accounting?.SalesTax;
+                salesOrder.GrossProfit = (salesOrder.FinalSalesAmount - car?.Cost) - salesOrder.TaxTotal - salesOrder.SaleCommission;
+                db.SalesOrders.Add(salesOrder);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CarID = new SelectList(db.Cars, "CarID", "CarID", salesOrder.CarID);
+            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "FirstName", salesOrder.CustomerID);
+            ViewBag.SalesMemberID = new SelectList(db.SalesMembers, "SalesMemberID", "FirstName", salesOrder.SalesMemberID);
+            return View(salesOrder);
+        }
