@@ -1,0 +1,45 @@
+[HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(List<IFormFile> Files , [Bind("Id,CategoryId,Name,Phone,Website,Street,City,State,Zip,Note")] Restaurant restaurant)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                
+                foreach (IFormFile file in Files)
+                {
+                    //Checking file is available to save.  
+                    if (file != null)
+                    {
+                        
+                        string target = @"wwwroot/Images";
+                        var inputFileName = Path.GetFileName(file.FileName);
+                        var serverSavePath = Path.Combine(Path.Combine("{0}/", Path.GetFullPath(target).ToString()), inputFileName);
+
+                        //Save file to server folder  
+                        await using (Stream fileStream = new FileStream(serverSavePath, FileMode.Create))
+                        {
+
+                            await file.CopyToAsync(fileStream);
+                        }
+
+                        var image = new Image()
+                        {
+                            RestaurantId = restaurant.Id,
+                            ImagePath = serverSavePath,
+                            Title = inputFileName
+                        }; 
+                        restaurant.Images.Add(image);
+                        //assigning file uploaded status to ViewBag for showing message to user.  
+                        ViewBag.UploadStatus = Files.Count().ToString() + " files uploaded successfully.";
+                    }
+                }
+
+                _context.Add(restaurant);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", restaurant.CategoryId);
+            return View(restaurant);
+        }
