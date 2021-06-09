@@ -1,0 +1,292 @@
+    public class SalesMemberMetaData
+    {
+        [Display(Name = "Employee Id")]
+        public int SalesMemberID { get; set; }
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+        [Display(Name = "Employee Name")]
+        public string Name => FirstName + " " + LastName;
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal Salary { get; set; }
+        [Display(Name = "Phone Number")]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Phone Number Must Be: xxx-xxx-xxxx")]
+        public string PhoneNumber { get; set; }
+        [Display(Name = "Active Employee")]
+        public bool ActiveEmployee { get; set; }
+        [Display(Name = "Start Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public System.DateTime StartDate { get; set; }
+        [Display(Name = "End Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public Nullable<System.DateTime> EndDate { get; set; }
+    }
+    [MetadataType(typeof(SalesMemberMetaData))]
+    public partial class SalesMember
+    {
+
+    }
+    public partial class SalesMember
+    {
+        public int? TimeEmployedYear => DateTime.Now.Year - StartDate.Year;
+
+        public int? TimeEmployedMonth => ((DateTime.Now.Year - StartDate.Year) * 12) + DateTime.Now.Month - StartDate.Month;
+        [Display(Name = "Revenue")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal? TotalRevenue => SalesOrders.Where(x => x.SalesMemberID == SalesMemberID).Sum(y => y.Revenue);
+
+        [Display(Name = "Sales")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal? SalesMemberTotal => SalesOrders.Where(x => x.SalesMemberID == SalesMemberID).Sum(y => y.FinalSalesAmount);
+
+        public List<int> year;
+        [Display(Name = "Profit")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal? TotalProfit => SalesOrders.Where(x => x.SalesMemberID == SalesMemberID).Sum(y => y.GrossProfit);
+
+        [Display(Name = "Commission")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal? SalesMemberComission => SalesOrders.Where(x => x.SalesMemberID == SalesMemberID).Sum(y => y.SaleCommission);
+        [Display(Name = "Vehicles Sold")]
+        public int? TotalSold => SalesOrders.Count();
+        public IEnumerable<SelectListItem> Months
+        {
+            get
+            {
+                return DateTimeFormatInfo
+                       .InvariantInfo
+                       .MonthNames
+                       .Select((monthName, index) => new SelectListItem
+                       {
+                           Value = (index + 1).ToString(),
+                           Text = monthName
+                       });
+            }
+        }
+    }
+
+    public class CarLotMetaData
+    {
+        [Display(Name = "Lot Number")]
+        public int CarLotID { get; set; }
+        [Display(Name = "Lot Name")]
+        public string LotName { get; set; }
+        [Display(Name = "Zip Code")]
+        public string ZipCode { get; set; }
+        [Display(Name = "Monthly Rent")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal MonthlyRent { get; set; }
+        [Display(Name = "Phone Number")]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Phone Number Must Be: xxx-xxx-xxxx")]
+        public string PhoneNumber { get; set; }
+        [Display(Name = "Active Lot")]
+        public bool ActiveLot { get; set; }
+        [Display(Name = "Open Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public System.DateTime DateLotOpened { get; set; }
+        [Display(Name = "Closed Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public Nullable<System.DateTime> DateLotClosed { get; set; }
+    }
+    [MetadataType(typeof (CarLotMetaData))]
+    public partial class CarLot
+    {
+
+    }
+
+    public class AccountingMetaData
+    {
+        [Display(Name = "Accounting ID")]
+        public int FixedAccountingID { get; set; }
+        [Display(Name = "Minimum Markup")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public decimal MinMargin { get; set; }
+        [Display(Name = "Ideal Markup")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public decimal IdealMargin { get; set; }
+        [Display(Name = "Sales Tax")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public decimal SalesTax { get; set; }
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public decimal Commission { get; set; }
+    }
+    [MetadataType(typeof (AccountingMetaData))]
+    public partial class Accounting
+    {
+
+    }
+
+    public class CarMetaData
+    {
+
+        [Display(Name = "Vehicle Number")]
+        public int? CarID { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "This Field Must Be A Number")]
+        public string Mileage { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal Cost { get; set; }
+        [Display(Name = "Retail Value")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public Nullable<decimal> MarketValue { get; set; }
+
+        [Display(Name = "Body Style")]
+        public string BodyType { get; set; }
+        [Display(Name = "Vin Number")]
+        public string VinNumber { get; set; }
+        [Display(Name = "Lot Number")]
+        public int? CarLotID { get; set; }
+        [Display(Name = "Model Number")]
+        public int? ModelID { get; set; }
+        public enum ColorList
+        {
+            Red, Green, Blue, Brown, Gold, Orange,
+            Black, White, Grey, Silver
+        };
+    }
+    [MetadataType(typeof(CarMetaData))]
+    public partial class Car
+    {
+
+    }
+
+    public class CarVendorMetaData
+    {
+        [Display(Name = "Vendor Number")]
+        public int CarVendorID { get; set; }
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+        [Display(Name = " Vendor Name")]
+        public string VendorName => FirstName + " " + LastName;
+        [Display(Name = "Zip Code")]
+        public string ZipCode { get; set; }
+        [Display(Name = "Phone Number")]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Phone Number Must Be: xxx-xxx-xxxx")]
+        public string PhoneNumber { get; set; }
+        [Display(Name = "Company Name")]
+        public string CompanyName { get; set; }
+    }
+    [MetadataType(typeof(CarVendorMetaData))]
+    public partial class CarVendor
+    {
+
+    }
+
+    public class CustomerMetaData
+    {
+        [Display(Name = "Customer Number")]
+        public int CustomerID { get; set; }
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+        [Display(Name = "Customer Name")]
+        public string Name => FirstName + " " + LastName;
+        [Display(Name = "Zip Code")]
+        public string ZipCode { get; set; }
+        [Display(Name = "Phone Number")]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Phone Number Must Be: xxx-xxx-xxxx")]
+        public string PhoneNumber { get; set; }
+    }
+    [MetadataType(typeof(CustomerMetaData))]
+    public partial class Customer
+    {
+
+    }
+
+    public class MakeMetaData
+    {
+        [Display(Name = "Make")]
+        public string Name { get; set; }
+    }
+    [MetadataType(typeof(MakeMetaData))]
+    public partial class Make
+    {
+
+    }
+
+    public class ModelMetaData
+    {
+        [Display(Name = "Model Number")]
+        public int ModelID { get; set; }
+        [Display(Name = "Model")]
+        public string Name { get; set; }
+        [Display(Name = "Make Number")]
+        public int? MakeID { get; set; }
+    }
+    [MetadataType(typeof(ModelMetaData))]
+    public partial class Model
+    {
+
+    }
+
+    public class PurchaseOrderMetaData
+    {
+        [Display(Name = "Purchase Order")]
+        public int PurchaseOrderID { get; set; }
+        [Display(Name = "Car Number")]
+        public int CarID { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public Nullable<decimal> Cost { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public System.DateTime Date { get; set; }
+        [Display(Name = "Employee Id")]
+        public int SalesMemberID { get; set; }
+        [Display(Name = "Vendor Id")]
+        public int CarVendorID { get; set; }
+    }
+    [MetadataType(typeof(PurchaseOrderMetaData))]
+    public partial class PurchaseOrder
+    {
+
+    }
+
+    public class SalesOrderMetaData
+    {
+        [Display(Name = "Car Number")]
+        public int CarID { get; set; }
+        [Display(Name = "Sales Order")]
+        public int SalesOrderID { get; set; }
+        [Display(Name = "Sale Total")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public decimal FinalSalesAmount { get; set; }
+        [Display(Name = "Markup")]
+        [DisplayFormat(DataFormatString = "{0:P2}", ApplyFormatInEditMode = true)]
+        public Nullable<decimal> Margin { get; set; }
+
+        [Display(Name = "Sales Tax")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public Nullable<decimal> TaxTotal { get; set; }
+
+        [Display(Name = "Sale Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public System.DateTime SaleDate { get; set; }
+
+        [Display(Name = "Commission")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public Nullable<decimal> SaleCommission { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public Nullable<decimal> Revenue { get; set; }
+
+        [Display(Name = "Gross Profit")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public Nullable<decimal> GrossProfit { get; set; }
+
+
+        [Display(Name = "Customer Number")]
+        public int CustomerID { get; set; }
+        [Display(Name = "Sales Member")]
+        public int SalesMemberID { get; set; }
+
+    }
+    [MetadataType(typeof(SalesOrderMetaData))]
+    public partial class SalesOrder
+    {
+
+    }
